@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNA/RNA Sequence Translator</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>DNA/RNA Sequence Translator</h1>
+            <p class="subtitle">Convert nucleotide sequences to amino acid sequences</p>
+        </header>
+
+        {% if error_message %}
+        <div class="error-banner">
+            {{ error_message }}
+        </div>
+        {% endif %}
+
+        <main>
+            <div class="content-wrapper">
+                <!-- Left side: Input/Output -->
+                <div class="translator-section">
+                    <!-- Input Section -->
+                    <div class="input-section">
+                        <label for="sequence-input">Enter DNA or RNA Sequence:</label>
+                        <textarea 
+                            id="sequence-input" 
+                            placeholder="Enter sequence (e.g., ATGGCCAAG for DNA or AUGGCCAAG for RNA)..."
+                            maxlength="300"
+                        ></textarea>
+                        <div class="input-info">
+                            <span id="char-count">0</span>/300 characters
+                            <span class="separator">|</span>
+                            <span id="codon-count">0</span> codons
+                        </div>
+                        <div class="button-group">
+                            <button id="translate-btn" class="btn btn-primary">Translate</button>
+                            <button id="clear-input-btn" class="btn btn-secondary">Clear</button>
+                        </div>
+                    </div>
+
+                    <!-- Output Section -->
+                    <div class="output-section">
+                        <label>Translation Result:</label>
+                        <div id="output-box" class="output-box">
+                            <span class="placeholder-text">Your protein sequence will appear here...</span>
+                        </div>
+                        <div id="output-info" class="output-info hidden">
+                            <span>Type: <strong id="result-type">-</strong></span>
+                            <span class="separator">|</span>
+                            <span>Length: <strong id="result-length">-</strong> nucleotides</span>
+                            <span class="separator">|</span>
+                            <span>Protein: <strong id="result-protein-length">-</strong> amino acids</span>
+                        </div>
+                    </div>
+
+                    <!-- Error Display -->
+                    <div id="error-display" class="error-message hidden"></div>
+
+                    <!-- Warning Display -->
+                    <div id="warning-display" class="warning-message hidden"></div>
+                </div>
+
+                <!-- Right side: Amino Acid Key -->
+                <div class="key-section">
+                    <h3>Amino Acid Reference</h3>
+                    <div class="amino-key">
+                        <div class="key-item"><span class="code">A</span> Alanine</div>
+                        <div class="key-item"><span class="code">C</span> Cysteine</div>
+                        <div class="key-item"><span class="code">D</span> Aspartic acid</div>
+                        <div class="key-item"><span class="code">E</span> Glutamic acid</div>
+                        <div class="key-item"><span class="code">F</span> Phenylalanine</div>
+                        <div class="key-item"><span class="code">G</span> Glycine</div>
+                        <div class="key-item"><span class="code">H</span> Histidine</div>
+                        <div class="key-item"><span class="code">I</span> Isoleucine</div>
+                        <div class="key-item"><span class="code">K</span> Lysine</div>
+                        <div class="key-item"><span class="code">L</span> Leucine</div>
+                        <div class="key-item"><span class="code">M</span> Methionine</div>
+                        <div class="key-item"><span class="code">N</span> Asparagine</div>
+                        <div class="key-item"><span class="code">P</span> Proline</div>
+                        <div class="key-item"><span class="code">Q</span> Glutamine</div>
+                        <div class="key-item"><span class="code">R</span> Arginine</div>
+                        <div class="key-item"><span class="code">S</span> Serine</div>
+                        <div class="key-item"><span class="code">T</span> Threonine</div>
+                        <div class="key-item"><span class="code">V</span> Valine</div>
+                        <div class="key-item"><span class="code">W</span> Tryptophan</div>
+                        <div class="key-item"><span class="code">Y</span> Tyrosine</div>
+                        <div class="key-item"><span class="code stop">*</span> Stop codon</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Section -->
+            <div class="history-section">
+                <div class="history-header">
+                    <h3>Translation History</h3>
+                    <button id="clear-history-btn" class="btn btn-small btn-danger">Clear History</button>
+                </div>
+                <div id="history-list" class="history-list">
+                    {% if history and history|length > 0 %}
+                        {% for entry in history %}
+                        <div class="history-item" data-id="{{ entry.id }}">
+                            <div class="history-input">
+                                <span class="history-label">{{ entry.seq_type }}:</span>
+                                <span class="history-seq">{{ entry.input_seq }}</span>
+                            </div>
+                            <div class="history-output">
+                                <span class="history-label">Protein:</span>
+                                <span class="history-seq">{{ entry.output_protein }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="no-history">No translation history yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>DNA/RNA Sequence Translator | AS.410.712.81.SP26 </p>
+        </footer>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="static/js/translator.js"></script>
+</body>
+</html>
